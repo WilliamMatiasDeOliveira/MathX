@@ -87,8 +87,7 @@
 
                     <div class="mb-3">
                         <label for="number_exercises">Número:</label>
-                        <input type="number" class="form-control" id="number_exercises" name="number_exercises" min="5"
-                            max="50" value="10">
+                        <input type="number" class="form-control" id="number_exercises" name="number_exercises" value="10"min="5" max="50">
                     </div>
 
                     <div class="text-end">
@@ -103,9 +102,25 @@
 
     </form>
 
+    {{-- validation error --}}
+    @if ($errors->any())
+        <div class="container">
+            <div class="row">
+                <div class="alert alert-danger text-center mt-3">
+                    @foreach ($errors->all() as $error)
+                        <p>Por favor selecione pelo menos uma operação.
+                            As parcelas devem ser entre 0 e 999.
+                            O numero de exercicios deve variar entre 5 e 50.
+                        </p>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    @endif
+
     <!-- footer -->
     <footer class="text-center mt-5">
-        <p class="text-secondary">MathX &copy; <span class="text-info">[ANO]</span></p>
+        <p class="text-secondary">MathX &copy; <span class="text-info">{{ date('Y') }}</span></p>
     </footer>
 
     <!-- bootstrap -->
