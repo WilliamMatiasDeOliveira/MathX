@@ -68,14 +68,18 @@
 
                     <div class="mb-3">
                         <label for="number_one">Mínimo:</label>
-                        <input type="number" class="form-control" id="number_one" name="number_one" min="0" max="999"
-                            value="0">
+                        <input type="number" class="form-control" id="number_one" name="number_one" min="0" max="999"value="0"required>
+                            {{-- show error --}}
+                            @error('number_one')
+                                <p class="text-success">
+                                    {{$message}}
+                                </p>
+                            @enderror
                     </div>
 
                     <div>
                         <label for="number_two">Máximo:</label>
-                        <input type="number" class="form-control" id="number_two" name="number_two" min="0" max="999"
-                            value="100">
+                        <input type="number" class="form-control" id="number_two" name="number_two" min="0" max="999"value="100"required>
                     </div>
 
                 </div>
@@ -87,7 +91,7 @@
 
                     <div class="mb-3">
                         <label for="number_exercises">Número:</label>
-                        <input type="number" class="form-control" id="number_exercises" name="number_exercises" value="10"min="5" max="50">
+                        <input type="number" class="form-control" id="number_exercises" name="number_exercises" value="10"min="5" max="50"required>
                     </div>
 
                     <div class="text-end">
@@ -107,12 +111,10 @@
         <div class="container">
             <div class="row">
                 <div class="alert alert-danger text-center mt-3">
-                    @foreach ($errors->all() as $error)
                         <p>Por favor selecione pelo menos uma operação.
                             As parcelas devem ser entre 0 e 999.
                             O numero de exercicios deve variar entre 5 e 50.
                         </p>
-                    @endforeach
                 </div>
             </div>
         </div>
