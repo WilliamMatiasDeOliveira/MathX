@@ -42,7 +42,6 @@ class MainController extends Controller
         // get checked operation
         $operations = [];
 
-        $operations = [];
         if ($request->check_sum) {
             $operations[] = 'sum';
         }
@@ -66,56 +65,40 @@ class MainController extends Controller
         // generate exercises
         $exercises = [];
         for ($i = 1; $i <= $number_exercises; $i++) {
-
-            $operation = $operations[array_rand($operations)];
-            $number1 = rand($min, $max);
-            $number2 = rand($min, $max);
-
-            $exercise = '';
-            $solution = '';
-
-            switch($operation){
-                case 'sum':
-                    $exercise = "$number1 + $number2";
-                    $solution = $number1 + $number2;
-                    break;
-                case 'subtraction':
-                    $exercise = "$number1 - $number2";
-                    $solution = $number1 - $number2;
-                    break;
-                case 'multiplication':
-                    $exercise = "$number1 x $number2";
-                    $solution = $number1 * $number2;
-                    break;
-                case 'division':
-                    // avoid division by zero
-                    if($number2 == 0){
-                        $number2 = 1;
-                    }
-                    $exercise = "$number1 : $number2";
-                    $solution = $number1 / $number2;
-                    break;
-            }
-
-            // check if float
-            if(is_float($solution)){
-                $solution = round($solution, 2);
-            }
-            $exercises[] = [
-                'operation'=>$operation,
-                'exercise_number'=> $i,
-                'exercise'=>$exercise.' = ',
-                'solution'=>"$exercise = $solution"
-            ];
-
+            $exercises[] = $this->gerator_exercises($i, $operations, $min, $max);
         }
+
+        // put exercises in the session
+        session(['exercises'=>$exercises]);
 
         return view('operations', ['exercises'=>$exercises]);
     }
 
     public function print_exercises()
     {
-        echo 'imprimir exercicios';
+        // check if exercises in session
+        if(!session('exercises')){
+            return redirect()->route('home');
+        }
+
+        $exercises = session('exercises');
+
+        // exercises
+        echo '<pre>';
+        echo "<h1>Exercicios Matemáticos ". env('APP_NAME')."</h1>";
+        echo '<hr>';
+        foreach ($exercises as $exercise) {
+            echo '<h2><small>'.str_pad($exercise['exercise_number'], 2, '0', STR_PAD_LEFT)." -> ".'</small>'.$exercise['exercise'].'</h2>';
+        }
+
+        // solutions
+        echo '<hr>';
+        echo '<small>Soluções</small>';
+        foreach ($exercises as $exercise) {
+            echo '<br><small>'.str_pad($exercise['exercise_number'], 2, '0', STR_PAD_LEFT)." -> ".$exercise['solution'].'</small>';
+        }
+
+
     }
 
     public function export_exercises()

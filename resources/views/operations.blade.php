@@ -30,12 +30,7 @@
             @foreach ($exercises as $exercise )
                 <div class="col-3 display-6 mb-3">
                     <span class="badge bg-dark">
-                        {{-- add zero where exercise_number < 10 --}}
-                        @if ($exercise['exercise_number'] < 10)
-                            {{'0'.$exercise['exercise_number']}}
-                        @else
-                            {{$exercise['exercise_number']}}
-                        @endif
+                       {{str_pad($exercise['exercise_number'], 2, '0', STR_PAD_LEFT)}}
                     </span>
                     <span>{{$exercise['exercise']}}</span>
                 </div>
