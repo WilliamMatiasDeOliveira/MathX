@@ -103,7 +103,34 @@ class MainController extends Controller
 
     public function export_exercises()
     {
-        echo 'exportar exercicios';
+
+        // check if exercises in session
+        if(!session('exercises')){
+            return redirect()->route('home');
+        }
+
+        // create file to dowload with exercises
+        $exercises = session('exercises');
+        $file_name = 'exercises_'.env('APP_NAME').'_'.date('Ymdhis').'txt';
+
+        $content = '';
+        echo "Exercicios Matemáticos ". env('APP_NAME')."\n\n";
+        foreach ($exercises as $exercise) {
+            $content .= $exercise['exercise_number'].' -> '.$exercise['exercise']."\n";
+        }
+
+        // solutions
+        $content .= "\n";
+        $content .= "Soluções\n";
+        // echo str_repeat('-',20);
+        foreach ($exercises as $exercise) {
+            $content .= $exercise['exercise_number'].' -> '.$exercise['solution']."\n";
+        }
+
+        return response($content)
+                ->header('Content-type', 'text/plain')
+                ->header('Content-disposition', 'attachment; filename="'.$file_name.'"');
+
     }
 
     public function operations(){
